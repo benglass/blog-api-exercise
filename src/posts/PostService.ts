@@ -1,9 +1,7 @@
-import { v4 } from "uuid";
-
-type PostId = string;
+type PostId = number;
 
 type Post = {
-  id: PostId;
+  id: number;
   title: string;
   contents: string;
   timeStamp: string;
@@ -12,7 +10,7 @@ type Post = {
 
 const posts = [
   {
-    id: v4(),
+    id: 1,
     title: "My excellent blog post",
     contents: "<p>Some HTML contents</p>",
     // TODO: Need to ensure server is using a reliable time zone (utc)

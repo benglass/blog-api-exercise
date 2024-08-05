@@ -7,7 +7,13 @@ export class PostRouter {
     const postService = new PostService();
 
     app.get("/posts/:id", async (req: Request, res: Response) => {
-      const post = await postService.getPostById(req.params.id);
+      const postId = Number(req.params.id);
+
+      if (Number.isNaN(postId)) {
+        throw new APIError(400, "Invalid post id");
+      }
+
+      const post = await postService.getPostById(postId);
 
       if (!post) {
         throw new APIError(404, "Could not find post");
