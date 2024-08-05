@@ -1,4 +1,4 @@
-# Mamava Technical Assessment
+# Blog exercise
 
 For the purposes of this exercise, a blog post contains the following fields:
 • Id: a unique id
