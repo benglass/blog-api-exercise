@@ -1,6 +1,8 @@
-type PostId = number;
+import { APIError } from "../core/APIError";
 
-type Post = {
+export type PostId = number;
+
+export type Post = {
   id: number;
   title: string;
   contents: string;
@@ -8,7 +10,7 @@ type Post = {
   categoryId: number;
 };
 
-const posts = [
+let posts = [
   {
     id: 1,
     title: "My excellent blog post",
@@ -55,5 +57,36 @@ export class PostService {
 
     // TODO: Might have to load from DB to get full post (if id/ts is populated by db)
     return newPost;
+  }
+
+  async updatePost(postPartial: Partial<Post>): Promise<Post> {
+    // TODO: Make a better type for update that has id required
+    const postToUpdate = await this.getPostById(postPartial.id as PostId);
+    if (!postToUpdate) throw new APIError(404, "Could not find post");
+
+    // Merge in existing fields
+    const post: Partial<Post> = {
+      ...postToUpdate,
+      title: postPartial.title,
+      contents: postPartial.contents,
+      categoryId: postPartial.categoryId,
+    };
+
+    // TODO: Validation of presence/length of required
+    // TODO: Validation of categoryId, or let it be enforced at the DB level
+    // VAlidation would ensure that post is a valid Post type, so no need for "as Post"
+    const updatedPost = post as Post;
+
+    // TODO: Real persistence
+    posts = posts.map((p) => {
+      if (p.id === post.id) {
+        return updatedPost;
+      }
+
+      return p;
+    });
+
+    // TODO: Might have to load from DB to get full post (if id/ts is populated by db)
+    return updatedPost;
   }
 }
