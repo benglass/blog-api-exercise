@@ -27,5 +27,21 @@ export class PostRouter {
 
       res.json(posts).send();
     });
+
+    app.post("/posts", async (req: Request, res: Response) => {
+      // TODO: Have to add middleware to parse incoming body JSON
+      const body = JSON.parse(req.body);
+
+      const postData = {
+        title: body.title,
+        // TODO: Sanitize incoming html?
+        contents: body.contents,
+        categoryId: body.categoryId,
+      };
+
+      const post = await postService.createPost(postData);
+
+      res.json(post).send();
+    });
   }
 }
