@@ -13,20 +13,20 @@ function guardInvalidPostId(postIdRaw: string): PostId {
 }
 
 export class PostRouter {
-  apply(app: Express) {
-    const postService = new PostService();
+  constructor(private postService: PostService) {}
 
+  apply(app: Express) {
     app.get("/posts/:id", async (req: Request, res: Response) => {
       const postId = guardInvalidPostId(req.params.id);
 
-      const post = await postService.getPostById(postId);
+      const post = await this.postService.getPostById(postId);
       if (!post) throw new APIError(404, "Could not find post");
 
       res.json(post).send();
     });
 
     app.get("/posts", async (req: Request, res: Response) => {
-      const posts = await postService.getPosts();
+      const posts = await this.postService.getPosts();
 
       res.json(posts).send();
     });
@@ -39,7 +39,7 @@ export class PostRouter {
         categoryId: req.body.categoryId,
       };
 
-      const post = await postService.createPost(postData);
+      const post = await this.postService.createPost(postData);
 
       res.json(post).send();
     });
@@ -55,7 +55,7 @@ export class PostRouter {
         categoryId: req.body.categoryId,
       };
 
-      const post = await postService.updatePost(postData);
+      const post = await this.postService.updatePost(postData);
 
       res.json(post).send();
     });

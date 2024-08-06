@@ -1,7 +1,8 @@
 import express, { Express, Request, Response } from "express";
-import { PostRouter } from "../posts";
+import { PostRouter, PostService } from "../posts";
 import { CategoryRouter } from "../categories";
 import { APIError } from "./APIError";
+import { SQLClient } from "./SQLClient";
 
 export function bootstrap(): Express {
   const app: Express = express();
@@ -10,8 +11,12 @@ export function bootstrap(): Express {
   // middleware
   app.use(express.json());
 
+  // Services
+  const sqlClient = new SQLClient();
+  const postService = new PostService(sqlClient);
+
   // routes
-  const routers = [new PostRouter(), new CategoryRouter()];
+  const routers = [new PostRouter(postService), new CategoryRouter()];
   routers.forEach((router) => {
     router.apply(app);
   });
@@ -25,6 +30,8 @@ export function bootstrap(): Express {
       statusCode = err.statusCode;
       message = err.message;
     }
+
+    console.log(err);
 
     res
       .status(statusCode)
