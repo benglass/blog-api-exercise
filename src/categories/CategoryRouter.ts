@@ -1,7 +1,7 @@
 import { Express, Request, Response } from "express";
 import { CategoryService } from "./CategoryService";
 
-export class PostRouter {
+export class CategoryRouter {
   apply(app: Express) {
     const categoryService = new CategoryService();
 
