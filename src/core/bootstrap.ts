@@ -6,6 +6,7 @@ export function bootstrap(): Express {
   const app: Express = express();
   const port = process.env.PORT || 8000;
 
+  app.use(express.json());
 
   const routers = [new PostRouter(), new CategoryRouter()];
   routers.forEach((router) => {

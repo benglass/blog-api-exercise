@@ -32,14 +32,11 @@ export class PostRouter {
     });
 
     app.post("/posts", async (req: Request, res: Response) => {
-      // TODO: Have to add middleware to parse incoming body JSON
-      const body = JSON.parse(req.body);
-
       const postData = {
-        title: body.title,
+        title: req.body.title,
         // TODO: Sanitize incoming html?
-        contents: body.contents,
-        categoryId: body.categoryId,
+        contents: req.body.contents,
+        categoryId: req.body.categoryId,
       };
 
       const post = await postService.createPost(postData);
@@ -50,15 +47,12 @@ export class PostRouter {
     app.put("/posts/:id", async (req: Request, res: Response) => {
       const postId = guardInvalidPostId(req.params.id);
 
-      // TODO: Have to add middleware to parse incoming body JSON
-      const body = JSON.parse(req.body);
-
       const postData = {
         id: postId,
-        title: body.title,
+        title: req.body.title,
         // TODO: Sanitize incoming html?
-        contents: body.contents,
-        categoryId: body.categoryId,
+        contents: req.body.contents,
+        categoryId: req.body.categoryId,
       };
 
       const post = await postService.updatePost(postData);
