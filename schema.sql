@@ -1,0 +1,14 @@
+CREATE TABLE categories (
+  id INTEGER NOT NULL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE posts (
+  id INTEGER NOT NULL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  contents TEXT NOT NULL,
+  category_id INTEGER NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(category_id) REFERENCES categories(id)
+);
+
